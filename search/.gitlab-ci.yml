@@ -1,0 +1,24 @@
+image: docker:latest
+
+variables:
+  DOCKER_HOST: tcp://docker:2375
+
+services:
+  - docker:17.06-dind
+
+before_script:
+  - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+
+build-master:
+  image: docker:17.06
+  stage: build
+  script:
+    - export TAG=$(date +%Y-%m-%d_%H-%M-%S)_"$CI_PIPELINE_ID"
+    - cd globaleda
+    - docker pull "$CI_REGISTRY_IMAGE":latest || true
+    - docker build --cache-from "$CI_REGISTRY_IMAGE":latest -t "$CI_REGISTRY_IMAGE":"$TAG" .
+    - docker tag "$CI_REGISTRY_IMAGE":"$TAG" "$CI_REGISTRY_IMAGE":latest
+    - docker push "$CI_REGISTRY_IMAGE":"$TAG"
+    - docker push "$CI_REGISTRY_IMAGE":latest
+  only:
+    - master
