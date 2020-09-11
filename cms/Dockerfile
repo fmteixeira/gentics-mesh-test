@@ -19,5 +19,5 @@ RUN mkdir /graphdb && \
     mkdir /mesh/data
 
 WORKDIR /mesh
-RUN wget -q -O /mesh/mesh.jar https://maven.gentics.com/maven2/com/gentics/mesh/mesh-server/1.4.0/mesh-server-1.4.0.jar
+RUN wget -q -O /mesh/mesh.jar https://maven.gentics.com/maven2/com/gentics/mesh/mesh-server/1.7.1/mesh-server-1.7.1.jar
 COPY files /
